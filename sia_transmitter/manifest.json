@@ -1,0 +1,9 @@
+{
+    "domain": "sia_transmitter",
+    "name": "SIA Transmitter",
+    "config_flow": true,
+    "documentation": "https://github.com/icilundi/ha-sia-transmitter",
+    "version": "1.0.0",
+    "requirements": []
+  }
+  
