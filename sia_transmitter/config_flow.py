@@ -15,13 +15,14 @@ from homeassistant.config_entries import (
 from homeassistant.const import CONF_PORT, CONF_PROTOCOL
 
 from .const import (
-    CONF_HOST,
-    CONF_ACCOUNT_ID,
-    CONF_ACCOUNTS,
-    CONF_ADDITIONAL_ACCOUNTS,
-    CONF_INTERVAL,
     DOMAIN,
     TITLE,
+    CONF_HOST,
+    CONF_ACCOUNT_ID,
+    CONF_ADDITIONAL_ACCOUNTS,
+    CONF_SUPERVISION,
+    CONF_INTERVAL,
+    CONF_ACCOUNTS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ MAIN_ACCOUNT_SCHEMA = vol.Schema(
         # vol.Optional(CONF_PROTOCOL, default="TCP"): vol.In(["TCP", "UDP"]),
         vol.Required(CONF_ACCOUNT_ID): str,
         # vol.Optional(CONF_ENCRYPTION_KEY): str,
+        vol.Required(CONF_SUPERVISION, default=False): bool,
         vol.Required(CONF_INTERVAL, default=1): int,
         vol.Optional(CONF_ADDITIONAL_ACCOUNTS, default=False): bool,
     }
@@ -49,6 +51,7 @@ ACCOUNT_SCHEMA = vol.Schema(
     }
 )
 
+
 class SIAConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for sia."""
 
@@ -56,7 +59,7 @@ class SIAConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         """Initialize the config flow."""
-        self._data: dict[str, Any] = {CONF_INTERVAL : 0, CONF_ACCOUNTS: []}
+        self._data: dict[str, Any] = {CONF_SUPERVISION: False, CONF_INTERVAL: 0, CONF_ACCOUNTS: []}
         # self._options: Mapping[str, Any] = {CONF_ACCOUNTS: {}}
 
     async def async_step_user(
@@ -91,9 +94,10 @@ class SIAConfigFlow(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any]
     ) -> ConfigFlowResult:
         """Handle the user_input, check if configured and route to the right next step or create entry."""
-        if user_input.get(CONF_INTERVAL):
+        if user_input.get(CONF_SUPERVISION):
+            self._data[CONF_SUPERVISION] = user_input[CONF_SUPERVISION]
             self._data[CONF_INTERVAL] = user_input[CONF_INTERVAL]
-        
+
         self._data[CONF_ACCOUNTS].append(
             {
                 CONF_HOST: user_input[CONF_HOST],
