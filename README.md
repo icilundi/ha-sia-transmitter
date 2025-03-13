@@ -27,9 +27,9 @@ git clone https://github.com/icilundi/ha-sia-transmitter.git
 - [ ] Properly handle sequence number
 - [ ] Represent hosts status as binary sensors
 - [ ] String keys
-- [ ] Let the user decide to send supervision message
 - [ ] Let the user decide to send the timestamp in supervision message in config flow
 - [ ] Find a better way to manually send a message than with a service
+- [x] Let the user decide to send supervision message
 
 
 ## Contributing
