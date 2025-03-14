@@ -13,6 +13,7 @@ from .const import (
     CONF_ACCOUNT_ID,
     CONF_SUPERVISION,
     CONF_INTERVAL,
+    CONF_SUPERVISION_TS,
     CONF_ACCOUNTS,
     SERVICE_SEND_SIA_NAME,
 )
@@ -34,7 +35,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
                     account[CONF_HOST],
                     account[CONF_PORT],
                     account[CONF_ACCOUNT_ID],
-                    True,
+                    config_entry.data[CONF_SUPERVISION_TS]
                 )
                 hass.data[DOMAIN]["connection"] = idx
                 _LOGGER.warning(f"Connexion réussie avec le compte à l'index {idx}.")
@@ -50,7 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
             account[CONF_HOST],
             account[CONF_PORT],
             account[CONF_ACCOUNT_ID],
-            False,
+            service_call.data.get("timestamp"),
             service_call.data.get("message"),
         )
 
@@ -62,13 +63,11 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     #     for attempt in range(max_attempts):
     #         current_server_idx = hass.data[DOMAIN].get("connection")
     #         if current_server_idx is None or current_server_idx >= len(accounts):
-    #             _LOGGER.error(
-    #                 "Aucune connexion valide trouvée. Lancement de la supervision."
-    #             )
+    #             _LOGGER.error("No valid connection found, starting supervision")
     #             await supervision_message()
     #             current_server_idx = hass.data[DOMAIN].get("connection")
     #             if current_server_idx is None:
-    #                 _LOGGER.error("Aucune connexion obtenue après supervision.")
+    #                 _LOGGER.error("No connection established after supervision")
     #                 return
 
     #         account = accounts[current_server_idx]
@@ -80,9 +79,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     #                 False,
     #                 message,
     #             )
-    #             _LOGGER.info(
-    #                 f"Message envoyé avec succès via le compte à l'index {current_server_idx}."
-    #             )
+    #             _LOGGER.info(f"Message successfully sent to ")
     #             break  # Succès : on sort de la boucle
     #         except Exception as e:
     #             _LOGGER.error(
@@ -97,12 +94,14 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
     if config_entry.data[CONF_SUPERVISION]:
         async_track_time_interval(
-            hass, supervision_message, timedelta(seconds=config_entry.data[CONF_INTERVAL])
+            hass,
+            supervision_message,
+            timedelta(seconds=config_entry.data[CONF_INTERVAL]),
         )
-    # ExampleServicesSetup(hass, config_entry)
-    # await hass.config_entries.async_forward_entry_setups(config_entry, ["binary_sensor"])
-
+        # ExampleServicesSetup(hass, config_entry)
+        # await hass.config_entries.async_forward_entry_setups(config_entry, ["binary_sensor"])
         await supervision_message()
+
     return True
 
 

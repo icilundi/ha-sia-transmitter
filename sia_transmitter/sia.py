@@ -39,13 +39,15 @@ class SIAProtocol:
     """Class to handle sending message using SIA protocol"""
 
     async def send_sia(
-        self, host: str, port: int, account_id: str, timestamp: bool, message: str = ""
+        self, host: str, port: int, account_id: str, timestamp: bool, data: str = "", extended_data: str = ""
     ) -> None:
-        timestamp = datetime.now(timezone.utc).strftime("%H:%M:%S,%m-%d-%Y")
-        message = f'"SIA-DCS"0001L0#{account_id}[{message}]_{timestamp}'
+        ts = f"_{datetime.now(timezone.utc).strftime('%H:%M:%S,%m-%d-%Y')}" if timestamp else ""
+        ext_data = f"[{extended_data}]" if extended_data else ""
+        message = f'"SIA-DCS"0001L0#{account_id}[{data}]{ext_data}{ts}'
         message_length = self._change_hex_format(hex(len(message)))
         crc = self._crc_calc(message)
         sia_message = f"\x0A{crc}{message_length}{message}\x0D"
+        _LOGGER.warning({sia_message})
         # Create a TCP socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             try:

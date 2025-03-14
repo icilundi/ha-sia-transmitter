@@ -1,5 +1,5 @@
 
-# Home Assistant SIA Transmitter
+# Home Assistant SIA Transmitter WIP
 
 A custom integration that enables Home Assistant to be used as an SIA transmitter.
 
@@ -26,10 +26,10 @@ git clone https://github.com/icilundi/ha-sia-transmitter.git
 ## TODO
 - [ ] Properly handle sequence number
 - [ ] Represent hosts status as binary sensors
+- [ ] Add extended data field
 - [ ] String keys
-- [ ] Let the user decide to send the timestamp in supervision message in config flow
-- [ ] Find a better way to manually send a message than with a service
-- [x] Let the user decide to send supervision message
+- [x] Let the user decide to send the timestamp in supervision message in config flow
+- [x] ~~Let the user decide to send supervision message~~
 
 
 ## Contributing

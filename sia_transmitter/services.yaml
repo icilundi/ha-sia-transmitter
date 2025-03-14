@@ -2,10 +2,15 @@ service_send_sia:
   name: Send SIA message
   description: Send an SIA message to the current host with a message
   fields:
+    timestamp:
+      name: Enable timestamp
+      description: Enable to send a timestamp with the data
+      required: true
+      selector:
+        boolean:
     message:
       name: Message
       description: The data to send, often the account ID with an event code
-      example: "#54321|NFA128"
       required: false
       selector:
         text:

@@ -5,6 +5,7 @@ CONF_PORT = "port" # Can be removed and use home assistant built in instead
 CONF_ACCOUNT_ID = "account_id"
 CONF_SUPERVISION = "enable_supervision"
 CONF_INTERVAL = "interval"
+CONF_SUPERVISION_TS = "supervision_timestamp"
 CONF_ADDITIONAL_ACCOUNTS = "additional_account"
 CONF_ACCOUNTS = "accounts"
 CONF_ACCOUNT = "account"
