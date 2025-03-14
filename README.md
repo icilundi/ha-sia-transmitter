@@ -1,5 +1,5 @@
 
-# Home Assistant SIA Transmitter
+# Home Assistant SIA Transmitter WIP
 
 A custom integration that enables Home Assistant to be used as an SIA transmitter.
 
