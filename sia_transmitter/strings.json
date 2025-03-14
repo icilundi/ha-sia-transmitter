@@ -1,0 +1,18 @@
+{
+    "config": {
+      "step": {
+        "user": {
+          "data": {
+            "host": "Host",
+            "port": "[%key:common::config_flow::data::port%]",
+            "account_id": "Account ID",
+            "enable_supervision": "Enable supervision",
+            "interval": "Ping Interval (sec)",
+            "supervision_timestamp": "Enable timestamp in supervision",
+            "additional_account": "Additional accounts"
+          },
+          "title": "Setup the main account and supervision"
+        }
+      }
+    }
+  }

@@ -35,7 +35,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
                     account[CONF_HOST],
                     account[CONF_PORT],
                     account[CONF_ACCOUNT_ID],
-                    config_entry.data[CONF_SUPERVISION_TS]
+                    config_entry.data[CONF_SUPERVISION_TS],
                 )
                 hass.data[DOMAIN]["connection"] = idx
                 _LOGGER.warning(f"Connexion réussie avec le compte à l'index {idx}.")
@@ -52,7 +52,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
             account[CONF_PORT],
             account[CONF_ACCOUNT_ID],
             service_call.data.get("timestamp"),
-            service_call.data.get("message"),
+            service_call.data.get("message", ""),
         )
 
     # async def send_sia_message(service_call: ServiceCall):

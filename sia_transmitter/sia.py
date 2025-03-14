@@ -37,13 +37,23 @@ class ResponseError(SIAError):
 
 class SIAProtocol:
     """Class to handle sending message using SIA protocol"""
+    seq_number = 1
+
+    def get_seq_number(self):
+        return str(self.seq_number).zfill(4)
+    
+    def add_to_seq(self):
+        if self.seq_number == 9999:
+            self.seq_number = 1
+            return
+        self.seq_number += 1
 
     async def send_sia(
         self, host: str, port: int, account_id: str, timestamp: bool, data: str = "", extended_data: str = ""
     ) -> None:
         ts = f"_{datetime.now(timezone.utc).strftime('%H:%M:%S,%m-%d-%Y')}" if timestamp else ""
         ext_data = f"[{extended_data}]" if extended_data else ""
-        message = f'"SIA-DCS"0001L0#{account_id}[{data}]{ext_data}{ts}'
+        message = f'"SIA-DCS"{self.get_seq_number()}L0#{account_id}[{data}]{ext_data}{ts}'
         message_length = self._change_hex_format(hex(len(message)))
         crc = self._crc_calc(message)
         sia_message = f"\x0A{crc}{message_length}{message}\x0D"
@@ -61,7 +71,12 @@ class SIAProtocol:
 
                 # Receive acknowledgment (optional, if HA responds)
                 response = sock.recv(1024)
-                _LOGGER.warning(f"Response from HA: {response.decode()}")
+                response_message = response.decode()
+
+                if "ACK" not in response_message:
+                    raise ResponseError(f"Server did not return an acknowledgement: {response.decode()}")
+                
+                self.add_to_seq()
 
             except socket.timeout as e:
                 raise ConnectionError(

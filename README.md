@@ -24,11 +24,12 @@ cd ./config/custom_components
 git clone https://github.com/icilundi/ha-sia-transmitter.git
 ```
 ## TODO
-- [ ] Properly handle sequence number
 - [ ] Represent hosts status as binary sensors
 - [ ] Add extended data field
 - [ ] String keys
-- [x] Let the user decide to send the timestamp in supervision message in config flow
+- [ ] Properly handle account prefix & receiver number
+- [x] ~~Properly handle sequence number~~
+- [x] ~~Let the user decide to send the timestamp in supervision message in config flow~~
 - [x] ~~Let the user decide to send supervision message~~
 
 
