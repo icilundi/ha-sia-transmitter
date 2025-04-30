@@ -23,6 +23,8 @@ from .const import (
     CONF_SUPERVISION,
     CONF_INTERVAL,
     CONF_SUPERVISION_TS,
+    CONF_WEBHOOK,
+    CONF_WEBHOOK_DATA,
     CONF_ACCOUNTS,
 )
 
@@ -38,6 +40,8 @@ MAIN_ACCOUNT_SCHEMA = vol.Schema(
         vol.Required(CONF_SUPERVISION, default=False): bool,
         vol.Required(CONF_INTERVAL, default=1): int,
         vol.Optional(CONF_SUPERVISION_TS, default=True): bool,
+        vol.Optional(CONF_WEBHOOK): str,
+        vol.Optional(CONF_WEBHOOK_DATA): str,
         vol.Optional(CONF_ADDITIONAL_ACCOUNTS, default=False): bool,
     }
 )
@@ -101,6 +105,12 @@ class SIAConfigFlow(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any]
     ) -> ConfigFlowResult:
         """Handle the user_input, check if configured and route to the right next step or create entry."""
+        if user_input.get(CONF_WEBHOOK):
+            self._data[CONF_WEBHOOK] = user_input[CONF_WEBHOOK]
+
+        if user_input.get(CONF_WEBHOOK_DATA):
+            self._data[CONF_WEBHOOK_DATA] = user_input[CONF_WEBHOOK_DATA]
+
         if user_input.get(CONF_SUPERVISION):
             self._data[CONF_SUPERVISION] = user_input[CONF_SUPERVISION]
             self._data[CONF_INTERVAL] = user_input[CONF_INTERVAL]

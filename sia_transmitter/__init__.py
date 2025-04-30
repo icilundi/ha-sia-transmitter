@@ -39,6 +39,9 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
                 )
                 hass.data[DOMAIN]["connection"] = idx
                 _LOGGER.warning(f"Connexion réussie avec le compte à l'index {idx}.")
+                
+                if CONF_WEBHOOK in config_entry.data:
+                    send_webhook(config_entry.data[CONF_WEBHOOK], "supervision", {}, config_entry.data.get(CONF_WEBHOOK_DATA))
                 break
             except Exception as e:
                 _LOGGER.error(f"Échec de connexion pour le compte {idx}: {e}")
@@ -54,6 +57,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
             service_call.data.get("timestamp"),
             service_call.data.get("message", ""),
         )
+        if CONF_WEBHOOK in config_entry.data:
+            send_webhook(config_entry.data[CONF_WEBHOOK], "message", message, config_entry.data.get(CONF_WEBHOOK_DATA))
 
     # async def send_sia_message(service_call: ServiceCall):
     #     """Send a message to the server and in a case of failure, retry by calling supervision"""
