@@ -24,7 +24,7 @@ cd ./config/custom_components
 git clone https://github.com/icilundi/ha-sia-transmitter.git
 ```
 ## TODO
-- [ ] Add webhook parameter
+- [x] Add webhook parameter
 - [ ] Represent hosts status as binary sensors
 - [ ] Add extended data field
 - [ ] String keys
