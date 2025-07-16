@@ -1,7 +1,8 @@
 import voluptuous as vol
 import logging
 import socket
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse, callback
@@ -51,7 +52,7 @@ class SIAProtocol:
     async def send_sia(
         self, host: str, port: int, account_id: str, timestamp: bool, data: str = "", extended_data: str = ""
     ) -> None:
-        ts = f"_{datetime.now(timezone.utc).strftime('%H:%M:%S,%m-%d-%Y')}" if timestamp else ""
+        ts = f"_{datetime.now(ZoneInfo('Europe/Paris')).strftime('%H:%M:%S,%m-%d-%Y')}" if timestamp else ""
         ext_data = f"[{extended_data}]" if extended_data else ""
         message = f'"SIA-DCS"{self.get_seq_number()}L0#{account_id}[{data}]{ext_data}{ts}'
         message_length = self._change_hex_format(hex(len(message)))
