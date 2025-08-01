@@ -5,6 +5,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def send_webhook(webhook_url, message_type, sia_data, custom_data):
     #TODO Parse custom data as json before passing it as parameter
+    custom_data = json.loads(custom_data)
     payload = {'type': message_type, 'sia_data': sia_data, **custom_data}
     headers = {"Content-Type": "application/json"}
     
